@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+    <html lang = "en">
+
+    <head>
+    <title>Login page </title> 
+	<!-- Include CSS File Here -->
+	<link rel="stylesheet" href="css/style.css"/>
+	
+	
+    <script type = "text/javascript" src = "//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" ></script> 
+    <script type = "text/javascript" >
+
+	
+	$(function() {
+	
+		<!-- var key = localStorage.getItem("loginOK"); -->
+			<!-- if(key ==""){ -->
+				<!-- alert("pls login"); -->
+				<!-- return; -->
+			<!-- } -->
+		
+		$("#pressme").click(function(){
+		
+			var loginTxt = $("#loginTxt").val();
+			var pass = $("#password").val();
+			var mydata = "login="+loginTxt+"&password="+pass;
+
+			location.href="http://127.0.0.1:9999/register";
+			
+		});	
+		
+		$("#login").click(function(){
+			var loginTxt = $("#loginTxt").val();
+			var pass = $("#password").val();
+			var mydata = "login="+loginTxt+"&password="+pass;
+			$.ajax({
+				type: 'POST',
+				url: 'http://127.0.0.1:9999/login',
+				data: mydata,
+				success: function(data) {
+					if (data == "SUCCESS") {
+						
+						alert("Welcome " + loginTxt);
+						localStorage.setItem("loginOK", "1");
+						localStorage.setItem("username", loginTxt);
+						location.href="http://127.0.0.1:9999/favlist";
+						
+					} else if (data == "FAIL") {
+						alert("Your ID or password was incorrect.");
+					}
+				},
+				error: function(xhr, status, error) {
+					console.log('Error: ' + error.message);
+				}
+			});
+		});
+		
+    });
+</script> 
+</head>
+<body>
+
+<div class="container">
+<div class="main">
+
+<!-- <form class="form" method="post" action="#"> -->
+<h2>Recipe Login System</h2>
+<label>Login :</label>
+<input type="text" name="login" id="loginTxt">
+<label>Password :</label>
+<input type="password" name="password" id="password">
+
+<!-- <input type="button" name="btnLogin" id="btnLogin" value="Login"> -->
+<button id ="pressme"> Register </button>
+<button id ="login"> Login </button>
+
+<!-- </form> -->
+</div>
+</div>
+
+</body>
+</html>

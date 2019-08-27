@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+    <html lang = "en">
+
+    <head>
+    <title>Favour List</title> 
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+	<link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.7.0/css/all.css' integrity='sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ' crossorigin='anonymous'>
+  
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script type = "text/javascript" src = "//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" ></script> 
+    <script type = "text/javascript" >
+
+	
+	$(function() {
+		var key = localStorage.getItem("loginOK");
+		var selectedId;
+		<!-- document.getElementById('editBox').style.visibility = 'hidden'; -->
+		
+		if(key == null){
+			alert("pls login");
+			// go back to login page
+			return;
+		} else {
+		var username = localStorage.getItem("username");
+		// page initialize
+			$.ajax({
+				type: 'PUT',
+				url: 'http://127.0.0.1:9999/favlist',
+				<!-- //data: mydata, -->
+				success: function(data) {
+					var txt = JSON.parse(data);
+					alert("Loading profile...");
+
+			
+					document.getElementById('cardtitle1').innerHTML = (""+txt[0]['topic']); 
+					document.getElementById('cardbody1').innerHTML = (""+txt[0]['content']);
+					
+					document.getElementById('cardtitle1').innerHTML = (""+txt[1]['topic']); 
+					document.getElementById('cardbody1').innerHTML = (""+txt[1]['content']);
+					
+					document.getElementById('cardtitle2').innerHTML = (""+txt[2]['topic']); 
+					document.getElementById('cardbody2').innerHTML = (""+txt[2]['content']);
+					
+					document.getElementById('cardtitle3').innerHTML = (""+txt[3]['topic']); 
+					document.getElementById('cardbody3').innerHTML = (""+txt[3]['content']);
+				},
+				error: function(xhr, status, error) {
+					console.log('Error: ' + error.message);
+				}
+			});
+		}
+		
+		$("#edit").click(function(){
+			if (document.getElementById('editBox').style.visibility == 'hidden')
+			{
+				document.getElementById('editBox').style.visibility = 'visible';
+			} else {
+				document.getElementById('editBox').style.visibility = 'hidden';
+			}
+		});	
+		
+		
+		$("#save").click(function(){
+			var topicTxt = $("#topicTxt").val();
+			var content = $("#contentTxt").val();
+			var mydata = "topic="+topicTxt+"&content="+content;
+			
+			document.getElementById('cardtitle5').innerHTML = topicTxt; 
+			document.getElementById('cardbody5').innerHTML = content;
+			alert("updated");
+		});
+		
+		$("#delete").click(function(){
+			document.getElementById('cardtitle2').innerHTML = ""; 
+			document.getElementById('cardbody2').innerHTML = "";
+			alert("recipe deleted");
+		});
+		
+    });
+	
+	function addFav(bookId){
+	if(document.getElementById("book" + bookId).style.color == "red")
+    {
+		var username = localStorage.getItem("username");
+		
+    	document.getElementById("book" + bookId).style.color = "grey";
+		selectedId = "";
+        /*
+		//AJAX request to remove fav bookid
+        $.ajax({
+        url: "http://127.0.0.1:9999/favlist",
+        type: 'DELETE',
+        data: {bookId: bookId, login:username},
+        dataType: "text/json"
+		});
+		*/
+    }
+    else
+    {
+		document.getElementById("book" + bookId).style.color = "red";
+        selectedId = bookId;
+		/*
+		//AJAX request to add a fav bookid
+        var request = $.ajax({
+        url: "server/favourite",
+        type: "POST",
+        data: {bookId: bookId, login:username},
+        dataType: "text/json"
+		});
+		*/
+    }
+}
+	
+</script> 
+</head>
+<body>
+
+
+
+<div class="container-fluid">
+<h2>Choose favour recipe</h2>
+<button id="save"> Save</button>
+<button id="edit"> Edit</button>
+<button id="delete"> Delete</button>
+	<div class="row">
+		<div class="col">
+			<div class="card" style="width:400px">
+				<img class="card-img-top" style="width:100%" alt="Card image" src="https://www.bookbaby.com/images/book-cover-design-basic.png">
+				<i class="fas fa-bookmark" id="book1" style="font-size:24px;color:grey" onclick="addFav(1)"></i>
+				<div class="card-body">
+					<h4 class="card-title" id="cardtitle1">Puff Pastry Waffles</h4>
+					<p class="card-text" id="cardbody1">"Add puff pastry to the list of good things you can 
+					snackify in your waffle iron. Although they don't puff up as much as oven-baked puff pastry,
+					they turn out crispy on the outside and tender on the inside, and they take only minutes to make.
+					Serve hot or at room temperature with syrup, fruit, Nutella, fruit preserves, or nut butter."</p>
+					<!-- <a class="btn btn-primary" href="#">Save as Favour List</a> -->
+				</div>
+			</div>
+		</div>
+	
+		<div class="col">
+			<div class="card" style="width:400px">
+				<img class="card-img-top" style="width:100%" alt="Card image" src="https://www.bookbaby.com/images/book-cover-design-basic.png">
+				<i class="fas fa-bookmark" id="book2" style="font-size:24px;color:grey" onclick="addFav(2)"></i>
+				<div class="card-body">
+					<h4 class="card-title" id="cardtitle2">Herb, Sausage, and Cheese Dutch Baby</h4>
+					<p class="card-text" id="cardbody2">"This savory Dutch baby is perfect for breakfast and brunch.
+					You can use bacon instead of sausage if you prefer. 
+					Serve with a light green salad."</p>
+					<!-- <a class="btn btn-primary" href="#">Save as Favour List</a> -->
+				</div>
+			</div>
+		</div>
+		
+		<div class="col">
+			<div class="card" style="width:400px">
+				<img class="card-img-top" style="width:100%" alt="Card image" src="https://www.bookbaby.com/images/book-cover-design-basic.png">
+				<i class="fas fa-bookmark" id="book3" style="font-size:24px;color:grey" onclick="addFav(3)"></i>
+				<div class="card-body">
+					<h4 class="card-title" id="cardtitle3">Honey-Lime Granola with Almonds</h4>
+					<p class="card-text" id="cardbody3">"This granola may sound strange, but the taste is out of this world!
+					The lime gives it a tangy and wonderful flavor that makes your mouth water for more!"</p>
+					<!-- <a class="btn btn-primary" href="#">Save as Favour List</a> -->
+				</div>
+			</div>
+		</div>
+		
+		<div class="col">
+			<div class="card" style="width:400px">
+				<img class="card-img-top" style="width:100%" alt="Card image" src="https://www.bookbaby.com/images/book-cover-design-basic.png">
+				<i class="fas fa-bookmark" id="book4" style="font-size:24px;color:grey" onclick="addFav(4)"></i>
+				<div class="card-body">
+					<h4 class="card-title" id="cardtitle4">Stovetop Granola</h4>
+					<p class="card-text" id="cardbody4">"A delicious quick and easy granola with almonds and dried cranberries that is made on the stovetop.
+					Feel free to add your favorite dried fruits and nuts too."</p>
+					<!-- <a class="btn btn-primary" href="#">Save as Favour List</a> -->
+				</div>
+			</div>
+		</div>
+		
+		<div class="col">
+			<div class="card" style="width:400px">
+				<img class="card-img-top" style="width:100%" alt="Card image" src="https://www.bookbaby.com/images/book-cover-design-basic.png">
+				<i class="fas fa-bookmark" id="book5" style="font-size:24px;color:grey" onclick="addFav(5)"></i>
+				<div class="card-body">
+					<h4 class="card-title" id="cardtitle5">Lemon Ricotta Pancakes</h4>
+					<p class="card-text" id="cardbody5">"If these pancakes were any lighter,
+					they would float off the plate--and I didn't even separate the eggs and whip the whites.
+					Also, I used water instead of milk--and I liked them better that way."</p>
+					<!-- <a class="btn btn-primary" href="#">Save as Favour List</a> -->
+				</div>
+			</div>
+		</div>
+	
+	</div>
+
+</div>
+
+<div id="editBox" style="visibility: hidden">
+<h2>Edit selected recipe</h2>
+<label>Topic :</label>
+<input type="text" name="topic" id="topicTxt">
+<label>Content :</label>
+<input type="text" name="content" id="contentTxt">
+</div>
+<!-- <label>login :</label> -->
+<!-- <input type="text" name="login" id="loginTxt"> -->
+<!-- <label>Password :</label> -->
+<!-- <input type="password" name="password" id="password"> -->
+
+<!--26/8-->
+
+<!-- <form> -->
+  <!-- <input id="fav1" type="checkbox" name="vehicle1" value="Apple"> <label for="fav1">I have a apple</label><br> -->
+  <!-- <input id="fav2" type="checkbox" name="vehicle2" value="Pen"> <label for="fav2">I have a pen</label><br> -->
+  <!-- <input id="fav3" type="checkbox" name="vehicle3" value="Pinapple"> <label for="fav3">I have a pinapple</label><br><br> -->
+  <!-- <input id="btn" type="button" value="Submit"> -->
+  <!-- <input id="cancel" type="button" value="Cancel"> -->
+<!-- </form> -->
+
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+    <html lang = "en">
+
+    <head>
+    <title>Registration Form </title> 
+	<link rel="stylesheet" href="css/style.css"/>
+	
+    <script type = "text/javascript" src = "//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" ></script> 
+    <script type = "text/javascript" >
+
+	
+	$(function() {
+	
+		<!-- var key = localStorage.getItem("loginOK"); -->
+			<!-- if(key ==""){ -->
+				<!-- alert("pls login"); -->
+				<!-- return; -->
+			<!-- } -->
+		
+		$("#submit").click(function(){
+		
+			var loginTxt = $("#loginTxt").val();
+			var pass = $("#password").val();
+			var cpass = $("#Cpassword").val();
+			var	nameChecker = $("#nameChecker").text();
+			var passwordChecker = $("#passwordChecker").text();
+			
+			
+			if (loginTxt == "" || pass == "" || cpass == "" || cpass != pass) {
+				if (cpass == ""){
+					$("#passwordChecker").text("Cofirm Password should not be empty.");
+				} else if (cpass != pass){
+					$("#passwordChecker").text("Password and Confirm Password are not match!");
+				} else if (pass == "") {
+					$("#passwordChecker").text("Password should not be empty.");	
+				} else {
+					$("#passwordChecker").text("");	
+				}
+				if (loginTxt == ""){
+					$("#nameChecker").text("Login name should not be empty.");
+				}
+				// all textfield checked.
+			} else {
+				$("#nameChecker").text("");	
+				$("#passwordChecker").text("");	
+				
+				var mydata = "login="+loginTxt+"&password="+pass;
+				
+				$.ajax({
+					type: 'POST',
+					url: 'http://127.0.0.1:9999/register',
+					data: mydata,
+					success: function(data) {
+						// response.end from server
+						if (data == "SUCCESS") {
+							alert("Successfully registered.");						
+							localStorage.setItem("loginOK", "1");
+							location.href="http://127.0.0.1:9999/favlist"
+						} else if (data == "FAIL"){
+							alert("Account name exist. Please change.");
+						}
+					},
+					error: function(xhr, status, error) {
+						console.log('Error: ' + error.message);
+					}
+				});
+			}
+		}); // end page	
+		
+		$("#cancel").click(function(){
+			location.href="http://127.0.0.1:9999/login";
+		});
+		
+    });
+</script> 
+</head>
+<body>
+<div class="container">
+<div class="main">
+<!-- <form class="form" method="post" action="#"> -->
+<h2>Register form</h2>
+<label>Login name:</label>
+<input type="text" name="Login" id="loginTxt">
+<label id="nameChecker">Login Checker</label>
+<br/>
+<label>Password :</label>
+<input type="password" name="password" id="password">
+<label id="passwordChecker">Password Checker</label>
+<br/>
+<label>Confirm Password :</label>
+<input type="password" name="Cpassword" id="Cpassword">
+<br/>
+
+<!-- <input type="button" name="btnLogin" id="btnLogin" value="Login"> -->
+<button id ="submit"> Submit </button>
+<button id ="cancel"> Cancel </button>
+<!-- </form> -->
+
+</div>
+</div>
+
+</body>
+</html>

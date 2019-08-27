@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+    <html lang = "en">
+
+    <head>
+    <title>Testing Server Call </title> 
+	<!-- Include CSS File Here -->
+	<!-- <link rel="stylesheet" href="css/style.css"/> -->
+	
+	
+    <script type = "text/javascript" src = "//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" ></script> 
+    <script type = "text/javascript" >
+
+	
+	$(function() {
+	
+
+		$("#pressme").click(function(){
+		
+			var loginTxt = $("#loginTxt").val();
+			var pass = $("#password").val();
+			var mydata = "login="+loginTxt+"&password="+pass;
+			
+		
+			$.ajax({
+				type: 'POST',
+				url: 'http://127.0.0.1:9999/dumpdata',
+				data: mydata,
+				success: function(data) {
+				
+					alert(data);
+
+				},
+				error: function(xhr, status, error) {
+					console.log('Error: ' + error.message);
+				}
+			});
+		});	
+		
+		$("#login").click(function(){
+			var loginTxt = $("#loginTxt").val();
+			var pass = $("#password").val();
+			var mydata = "login="+loginTxt+"&password="+pass;
+			$.ajax({
+				type: 'POST',
+				url: 'http://127.0.0.1:9999/login',
+				data: mydata,
+				success: function(data) {
+					if (data == "SUCCESS") {
+					
+						alert("Welcome " + loginTxt);
+						localStorage.setItem("loginOK", "1");
+						
+						location.href="http://127.0.0.1:9999/favlist";
+						
+					} else if (data == "FAIL") {
+						alert("Your ID or password was incorrect.");
+					}
+				},
+				error: function(xhr, status, error) {
+					console.log('Error: ' + error.message);
+				}
+			});
+		});
+		
+    });
+</script> 
+</head>
+<body>
+
+<div class="container">
+<div class="main">
+
+<!-- <form class="form" method="post" action="#"> -->
+<h2>Create Login Form Using jQuery</h2>
+<label>login :</label>
+<input type="text" name="login" id="loginTxt">
+<label>Password :</label>
+<input type="password" name="password" id="password">
+
+<!-- <input type="button" name="btnLogin" id="btnLogin" value="Login"> -->
+<button id ="pressme"> Call Server </button>
+<button id ="login"> Login </button>
+
+<!-- </form> -->
+</div>
+</div>
+
+</body>
+</html>

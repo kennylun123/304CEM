@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+    <html lang = "en">
+
+    <head>
+    <title>Show all recipe</title> 
+    <script type = "text/javascript" src = "//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" ></script> 
+    <script type = "text/javascript" >
+
+	
+	$(function() {
+		<!-- var key = localStorage.getItem("loginOK"); -->
+		<!-- if(key == null){ -->
+			<!-- alert("pls login"); -->
+			<!-- // go back to login page -->
+			<!-- return; -->
+		<!-- } -->
+		
+		$("#btn").click(function(){
+		// length 0 = uncheck
+		var fav1 = $("#fav1:checked").length;
+		var fav2 = $("#fav2:checked").length;
+		var fav3 = $("#fav3:checked").length;
+		
+		
+		
+			<!-- var loginTxt = $("#loginTxt").val(); -->
+			<!-- var pass = $("#password").val(); -->
+			<!-- var mydata = "login="+loginTxt+"&password="+pass; -->
+			
+			//alert(mydata);
+
+			$.ajax({
+				type: 'get',
+				url: 'https://mplpssl.wisx.io/nodered/getlampposts/',
+				<!-- //data: mydata, -->
+				success: function(data) {
+				
+					console.log(data);              
+					
+					<!-- //var obj = JSON.parse(data); -->
+					<!-- //console.log(obj[0]); -->
+					
+					
+					
+				},
+				error: function(xhr, status, error) {
+					console.log('Error: ' + error.message);
+				}
+			});
+		});	
+		
+		$("#cancel").click(function(){
+			var loginTxt = $("#loginTxt").val();
+			var pass = $("#password").val();
+			var mydata = "login="+loginTxt+"&password="+pass;
+			$.ajax({
+				type: 'POST',
+				url: 'http://127.0.0.1:9999/login',
+				data: mydata,
+				success: function(data) {
+					if (data == "SUCESS") {
+						alert("Welcome " + loginTxt);
+						localStorage.setItem("loginOK", "1");
+						
+						location.href="http://www.yahoo.com.hk";
+						
+					} else if (data == "FAIL") {
+						alert("Your ID or password was incorrect.");
+					}
+					//console.log(data);              
+					<!-- if (data == "sucess"){ -->
+						<!-- localStorage.setItem("loginOK", "1"); -->
+						
+						<!-- location.href="http://127.0.0.1:9999/favlist"; -->
+					<!-- } -->
+				},
+				error: function(xhr, status, error) {
+					console.log('Error: ' + error.message);
+				}
+			});
+		});
+		
+    });
+</script> 
+</head>
+<body>
+
+<h2>Choose favour food</h2>
+
+
+<!-- <label>login :</label> -->
+<!-- <input type="text" name="login" id="loginTxt"> -->
+<!-- <label>Password :</label> -->
+<!-- <input type="password" name="password" id="password"> -->
+
+<form>
+  <input id="fav1" type="checkbox" name="vehicle1" value="Apple"> <label for="fav1">I have a apple</label><br>
+  <input id="fav2" type="checkbox" name="vehicle2" value="Pen"> <label for="fav2">I have a pen</label><br>
+  <input id="fav3" type="checkbox" name="vehicle3" value="Pinapple"> <label for="fav3">I have a pinapple</label><br><br>
+  <input id="btn" type="button" value="Submit">
+  <input id="cancel" type="button" value="Cancel">
+</form>
+
+</body>
+</html>
